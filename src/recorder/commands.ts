@@ -56,7 +56,7 @@ export function registerRecorderCommands() {
     const customTourDirectory = vscode.workspace
       .getConfiguration(EXTENSION_NAME)
       .get("customTourDirectory", null);
-    const tourDirectory = customTourDirectory || `${VSCODE_DIRECTORY}/.tours`;
+    const tourDirectory = customTourDirectory || `${VSCODE_DIRECTORY}/tours`;
 
     return workspaceRoot.with({
       path: `${prefix}${tourDirectory}/${file}.tour`

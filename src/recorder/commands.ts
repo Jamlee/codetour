@@ -5,7 +5,11 @@ import { action, comparer, runInAction } from "mobx";
 import * as path from "path";
 import * as vscode from "vscode";
 import { workspace } from "vscode";
-import { EXTENSION_NAME, FS_SCHEME_CONTENT } from "../constants";
+import {
+  EXTENSION_NAME,
+  FS_SCHEME_CONTENT,
+  VSCODE_DIRECTORY
+} from "../constants";
 import { api, RefType } from "../git";
 import { CodeTourComment } from "../player";
 import { CodeTourNode, CodeTourStepNode } from "../player/tree/nodes";
@@ -43,7 +47,7 @@ export function registerRecorderCommands() {
     const file = title
       .toLocaleLowerCase()
       .replace(/\s/g, "-")
-      .replace(/[^\w\d\-_]/g, "");
+      .replace(/[^\w\d\-_\u4e00-\u9fa5]/g, "");
 
     const prefix = workspaceRoot.path.endsWith("/")
       ? workspaceRoot.path
@@ -52,7 +56,7 @@ export function registerRecorderCommands() {
     const customTourDirectory = vscode.workspace
       .getConfiguration(EXTENSION_NAME)
       .get("customTourDirectory", null);
-    const tourDirectory = customTourDirectory || ".tours";
+    const tourDirectory = customTourDirectory || `${VSCODE_DIRECTORY}/.tours`;
 
     return workspaceRoot.with({
       path: `${prefix}${tourDirectory}/${file}.tour`
@@ -654,7 +658,7 @@ export function registerRecorderCommands() {
         prompt: `Enter the title for this tour step`,
         value: step.title || ""
       });
-      
+
       if (typeof response === "undefined") {
         return;
       } else if (response) {
@@ -662,11 +666,11 @@ export function registerRecorderCommands() {
       } else {
         delete step.title;
       }
-      
+
       saveTour(node.tour);
     }
   );
-  
+
   vscode.commands.registerCommand(
     `${EXTENSION_NAME}.changeTourStepIcon`,
     async (node: CodeTourStepNode) => {
@@ -675,7 +679,7 @@ export function registerRecorderCommands() {
         prompt: `Enter the icon for this tour step`,
         value: step.icon || ""
       });
-      
+
       if (typeof response === "undefined") {
         return;
       } else if (response) {

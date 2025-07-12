@@ -37,7 +37,9 @@ const customDirectory = vscode.workspace
   .get("customTourDirectory", null);
 
 if (customDirectory) {
-  SUB_TOUR_DIRECTORIES.push(customDirectory);
+  if (!SUB_TOUR_DIRECTORIES.includes(customDirectory)) {
+    SUB_TOUR_DIRECTORIES.push(customDirectory);
+  }
 }
 
 export async function discoverTours(): Promise<void> {
@@ -113,7 +115,7 @@ async function readTourDirectory(uri: vscode.Uri): Promise<CodeTour[]> {
         if (type === vscode.FileType.File) {
           return readTourFile(fileUri);
         } else if (type === vscode.FileType.SymbolicLink) {
-          return readTourFile(fileUri)
+          return readTourFile(fileUri);
         } else {
           return readTourDirectory(fileUri);
         }

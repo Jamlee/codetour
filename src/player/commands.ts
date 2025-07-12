@@ -131,9 +131,8 @@ export function registerPlayerCommands() {
 
       const lineAdjustment = codeSnippet.split("\n").length - 1;
       if (lineAdjustment > 0) {
-        store.activeTour!.tour.steps[
-          store.activeTour!.step
-        ].line! += lineAdjustment;
+        store.activeTour!.tour.steps[store.activeTour!.step].line! +=
+          lineAdjustment;
 
         saveTour(store.activeTour!.tour);
       }
